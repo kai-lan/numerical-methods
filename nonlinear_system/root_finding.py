@@ -104,6 +104,36 @@ def newton_method(f, df, start, ite = 0, tol = 0):
     report += 'Newton\'s method: \n x = ' + str(x0) + ', iteration = ' + str(counter) \
               + ', absolute error = ' + str(err) + "\n"
     report += "-" * 85 + "\n"
-    report += tabulate(summary, headers=['Iteration k', 'Bisection x(k)'],
+    report += tabulate(summary, headers=['Iteration k', 'Newton x(k)'],
+                       tablefmt="github", floatfmt=(".16f"), numalign="center")
+    return x0, counter, err, report
+
+''' Secant method
+'''
+def secant(x0, x1):
+    return (2*x1 - math.cos(x1))*(x1 - x0)/(2*(x1 - x0) - (math.cos(x1)-math.cos(x0)))
+    
+    '''Secant method'''
+def secant_method(first, second, tolerance, secant, f):
+    counter = 0
+    x0 = first
+    summary = [[counter, x0]]
+    counter += 1
+    x1 = second
+    summary.append([counter, x1])
+    x = x1
+    
+    while abs(f(x)) >= tolerance:
+        counter += 1
+        x = x1 - secant(x0, x1)
+        summary.append([counter, x])
+        x0 = x1
+        x1 = x
+    err = abs(f(x0))
+    report = "-" * 85 + "\n"
+    report += 'Secant\'s method: \n x = ' + str(x0) + ', iteration = ' + str(counter) \
+              + ', absolute error = ' + str(err) + "\n"
+    report += "-" * 85 + "\n"
+    report += tabulate(summary, headers=['Iteration k', 'Secant x(k)'],
                        tablefmt="github", floatfmt=(".16f"), numalign="center")
     return x0, counter, err, report
