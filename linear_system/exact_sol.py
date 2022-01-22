@@ -356,3 +356,19 @@ def plu_decomp_sol_vec(A, b):
     y = forward_sub_vec(B, Pb, True)
     x = backward_sub_vec(B, y)
     return x
+
+# Solve a tridiagonal system Ax = b, where A consists of a, d, c 
+# three diagonal lines from down to up.
+def tridiagonal(a, d, c, b):
+    n = len(b)
+    x = np.zeros(n)
+    for k in range(n-1):
+        r = a[k]/d[k]
+        d[k+1] -= r * c[k]
+        b[k+1] -= r * b[k]
+        
+    x[n-1] = b[n-1]/d[n-1]
+    for k in range(n-2, -1, -1):
+        x[k] = (b[k] - c[k]*x[k+1])/d[k]
+    
+    return x
